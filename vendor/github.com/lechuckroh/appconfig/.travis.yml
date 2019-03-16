@@ -1,0 +1,10 @@
+language: go
+
+go:
+  - master
+
+branches:
+  only:
+    - master
+
+script: make docker-test

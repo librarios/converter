@@ -4,16 +4,15 @@
 *.dll
 *.so
 *.dylib
-librc
 
 # Test binary, build with `go test -c`
 *.test
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+*.html
+reports/
 
-# IDE
-.idea
-
-# Config
-/librc-*.yml
+# Project
+.idea/
+*.iml
