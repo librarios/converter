@@ -8,10 +8,24 @@ import (
 	"time"
 )
 
+func scan(c *cli.Context) error {
+	directory := c.Args().First()
+	if !c.Args().Present() {
+		log.Println("scan directory is not set.")
+		cli.ShowCommandHelpAndExit(c, "scan", 1)
+	}
+
+	librcApp := app.NewApp()
+	librcApp.Init()
+	librcApp.Scan(directory)
+	return nil
+}
+
 func upload(c *cli.Context) error {
 	filePath := c.Args().First()
 	if !c.Args().Present() {
-		return cli.NewExitError("upload filepath is not set", 1)
+		log.Println("upload filepath is not set")
+		cli.ShowCommandHelpAndExit(c, "upload", 1)
 	}
 
 	librcApp := app.NewApp()
@@ -32,6 +46,18 @@ func main() {
 	cliApp.Usage = "librarios CLI"
 	cliApp.Commands = []cli.Command{
 		{
+			Name:    "scan",
+			Aliases: []string{"s"},
+			Usage:   "scan `directory`",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "file, f",
+					Usage: "set output `filename`",
+				},
+			},
+			Action: scan,
+		},
+		{
 			Name:    "upload",
 			Aliases: []string{"u"},
 			Usage:   "upload `filepath`",
@@ -49,5 +75,4 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 }

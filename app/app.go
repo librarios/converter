@@ -23,6 +23,11 @@ func (app *App) Init() {
 	app.conf = conf
 }
 
+func (app *App) Scan(directory string) {
+	// TODO
+	log.Fatalln("scan is not implemented yet")
+}
+
 func (app *App) Upload(filePath, objectName, bucketName string) {
 	if len(bucketName) == 0 {
 		bucketName = app.conf.Librarios.Bucket
