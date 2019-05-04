@@ -1,37 +1,45 @@
 package main
 
 import (
+	"fmt"
 	"github.com/librarios/librc/app"
 	"github.com/urfave/cli"
 	"log"
 	"os"
+	"sort"
 	"time"
 )
+
+func printError(msg string) {
+	fmt.Printf("ERROR: %s\n\n", msg)
+}
 
 func scan(c *cli.Context) error {
 	directory := c.Args().First()
 	if !c.Args().Present() {
-		log.Println("scan directory is not set.")
+		printError("scan directory is not set.")
 		cli.ShowCommandHelpAndExit(c, "scan", 1)
 	}
 
 	librcApp := app.NewApp()
 	librcApp.Init()
-	librcApp.Scan(directory)
+	librcApp.Scan(directory, &app.ScanOption{
+		OutputFile: c.String("file"),
+	})
 	return nil
 }
 
 func upload(c *cli.Context) error {
 	filePath := c.Args().First()
 	if !c.Args().Present() {
-		log.Println("upload filepath is not set")
+		printError("upload filepath is not set")
 		cli.ShowCommandHelpAndExit(c, "upload", 1)
 	}
 
 	librcApp := app.NewApp()
 	librcApp.Init()
-	librcApp.Upload(filePath, "", "")
-	return nil
+	_, err := librcApp.Upload(filePath, c.String("bucket"), c.String("object"))
+	return err
 }
 
 func main() {
@@ -51,8 +59,9 @@ func main() {
 			Usage:   "scan `directory`",
 			Flags: []cli.Flag{
 				cli.StringFlag{
-					Name:  "file, f",
-					Usage: "set output `filename`",
+					Name:   "file, f",
+					Usage:  "set output `filename`",
+					EnvVar: "LIBRC_SCAN_OUTPUT",
 				},
 			},
 			Action: scan,
@@ -60,16 +69,25 @@ func main() {
 		{
 			Name:    "upload",
 			Aliases: []string{"u"},
-			Usage:   "upload `filepath`",
+			Usage:   "upload `filename`",
 			Flags: []cli.Flag{
 				cli.StringFlag{
-					Name:  "bucket, b",
-					Usage: "set destination `bucketName`",
+					Name:   "bucket, b",
+					Usage:  "set destination `bucketName`",
+					EnvVar: "LIBRC_UPLOAD_BUCKET",
+				},
+				cli.StringFlag{
+					Name:   "object, o",
+					Usage:  "set destination `objectName`",
+					EnvVar: "LIBRC_UPLOAD_OBJECT",
 				},
 			},
 			Action: upload,
 		},
 	}
+
+	sort.Sort(cli.FlagsByName(cliApp.Flags))
+	sort.Sort(cli.CommandsByName(cliApp.Commands))
 
 	err := cliApp.Run(os.Args)
 	if err != nil {

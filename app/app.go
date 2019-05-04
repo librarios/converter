@@ -1,7 +1,6 @@
 package app
 
 import (
-	"github.com/librarios/librc/minio"
 	"log"
 	"path/filepath"
 )
@@ -23,23 +22,29 @@ func (app *App) Init() {
 	app.conf = conf
 }
 
-func (app *App) Scan(directory string) {
-	// TODO
-	log.Fatalln("scan is not implemented yet")
+func (app *App) Scan(directory string, opt *ScanOption) {
+	scanCmd := NewScanCommand()
+	if err := scanCmd.Scan(directory, opt); err != nil {
+		log.Fatal(err)
+	}
 }
 
-func (app *App) Upload(filePath, objectName, bucketName string) {
-	if len(bucketName) == 0 {
-		bucketName = app.conf.Librarios.Bucket
-	}
+func (app *App) Upload(filePath, bucketName, objectName string) (int64, error) {
 	if len(objectName) == 0 {
 		objectName = filepath.Base(filePath)
 	}
 
-	size, err := minio.Upload(&app.conf.Minio, bucketName, filePath, objectName)
+	upload := NewUpload(&UploadOption{
+		MinioConf:         &app.conf.Minio,
+		DefaultBucketName: app.conf.Librarios.Bucket,
+	})
+
+	size, err := upload.Upload(filePath, bucketName, objectName)
 
 	if err != nil {
 		log.Fatalf("Failed to upload '%s': %s", filePath, err.Error())
 	}
 	log.Printf("Uploaded: %s --> %s/%s [%d bytes]\n", filePath, bucketName, objectName, size)
+
+	return size, err
 }

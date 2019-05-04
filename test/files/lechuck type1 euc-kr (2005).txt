@@ -1,0 +1,10 @@
+isbn=9788971723760
+owner=ȫ�浿
+origPubDate=1909
+origTitle=The Great Gatsby
+pubDate=2005-02-25
+boughtDate=2010-03-18
+boughtPrice=1900
+scanDate=2011.01.27
+scanPages=144
+price=5000
