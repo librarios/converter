@@ -11,18 +11,18 @@ func TestParseBookInfoFile(t *testing.T) {
 	a := assert.New(t)
 
 	baseDir := "../test/info-files/"
-	filenames := []string{
-		//"euc-kr.txt",
-		"utf-8.txt",
+	filenames := map[string]string{
+		"euc-kr.txt": "euc-kr",
+		"utf-8.txt": "utf-8",
 	}
 
-	for _, filename := range filenames {
+	for filename, enc := range filenames {
 		path := filepath.Join(baseDir, filename)
 		fileInfo, err := os.Stat(path)
 		if err != nil {
 			t.Error(err)
 		}
-		bookInfoFile, err := parseBookInfoFile(baseDir, fileInfo)
+		bookInfoFile, err := parseBookInfoFile(baseDir, fileInfo, enc)
 		if err != nil {
 			t.Error(err)
 		}

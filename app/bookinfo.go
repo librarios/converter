@@ -1,6 +1,9 @@
 package app
 
 import (
+	"bytes"
+	"golang.org/x/text/encoding/korean"
+	"golang.org/x/text/transform"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -30,14 +33,14 @@ func NewBookInfo() *BookInfo {
 	return &BookInfo{}
 }
 
-func parseBookInfoFile(dir string, fileInfo os.FileInfo) (*BookInfoFile, error) {
+func parseBookInfoFile(dir string, fileInfo os.FileInfo, enc string) (*BookInfoFile, error) {
 	path := filepath.Join(dir, fileInfo.Name())
 	bytes, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}
 
-	bookInfo, err := parseBookInfoBytes(bytes)
+	bookInfo, err := parseBookInfoBytes(bytes, enc)
 	if err != nil {
 		return nil, err
 	}
@@ -49,8 +52,26 @@ func parseBookInfoFile(dir string, fileInfo os.FileInfo) (*BookInfoFile, error) 
 	}, nil
 }
 
-func parseBookInfoBytes(bytes []byte) (*BookInfo, error) {
-	cfg, err := ini.Load(bytes)
+func decodeEuckr(buf []byte) ([]byte, error) {
+	var bufs bytes.Buffer
+	wr := transform.NewWriter(&bufs, korean.EUCKR.NewDecoder())
+	defer wr.Close()
+	if _, err := wr.Write(buf); err != nil {
+		return nil, err
+	}
+	return bufs.Bytes(), nil
+}
+
+func parseBookInfoBytes(buf []byte, enc string) (*BookInfo, error) {
+	if enc == "euc-kr" {
+		if euckrBuf, err := decodeEuckr(buf); err != nil {
+			return nil, err
+		} else {
+			buf = euckrBuf
+		}
+	}
+
+	cfg, err := ini.Load(buf)
 	if err != nil {
 		return nil, err
 	}

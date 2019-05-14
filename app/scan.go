@@ -42,7 +42,7 @@ func (c *ScanCommand) Scan(dir string, opt *ScanOption) error {
 
 	for _, fileInfo := range fileInfos {
 		if isExt(fileInfo, ".txt") {
-			bookInfoFile, err := parseBookInfoFile(dir, fileInfo)
+			bookInfoFile, err := parseBookInfoFile(dir, fileInfo, "")
 			if err != nil {
 				log.Printf("Failed to parse '%s': %s", fileInfo.Name(), err.Error())
 			} else {

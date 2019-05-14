@@ -1,3 +1,5 @@
+# github.com/davecgh/go-spew v1.1.1
+github.com/davecgh/go-spew/spew
 # github.com/go-ini/ini v1.42.0
 github.com/go-ini/ini
 # github.com/go-yaml/yaml v2.1.0+incompatible
@@ -20,23 +22,32 @@ github.com/minio/minio-go/pkg/set
 github.com/mitchellh/go-homedir
 # github.com/pkg/errors v0.8.1
 github.com/pkg/errors
+# github.com/pmezard/go-difflib v1.0.0
+github.com/pmezard/go-difflib/difflib
+# github.com/stretchr/testify v1.3.0
+github.com/stretchr/testify/assert
 # github.com/thoas/go-funk v0.4.0
 github.com/thoas/go-funk
 # github.com/urfave/cli v1.20.0
 github.com/urfave/cli
-# golang.org/x/crypto v0.0.0-20190313024323-a1f597ede03a
+# golang.org/x/crypto v0.0.0-20190513172903-22d7a77e9e5f
 golang.org/x/crypto/argon2
 golang.org/x/crypto/blake2b
-# golang.org/x/net v0.0.0-20190313220215-9f648a60d977
+# golang.org/x/net v0.0.0-20190514140710-3ec191127204
 golang.org/x/net/http/httpguts
 golang.org/x/net/publicsuffix
 golang.org/x/net/idna
-# golang.org/x/sys v0.0.0-20190215142949-d0b11bdaac8a
+# golang.org/x/sys v0.0.0-20190514135907-3a4b5fb9f71f
 golang.org/x/sys/cpu
-# golang.org/x/text v0.3.0
+golang.org/x/sys/unix
+# golang.org/x/text v0.3.2
+golang.org/x/text/encoding/korean
+golang.org/x/text/transform
+golang.org/x/text/encoding
+golang.org/x/text/encoding/internal
+golang.org/x/text/encoding/internal/identifier
 golang.org/x/text/secure/bidirule
 golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
-golang.org/x/text/transform
 # gopkg.in/ini.v1 v1.42.0
 gopkg.in/ini.v1
