@@ -1,6 +1,7 @@
 package app
 
 import (
+	"io/ioutil"
 	"os"
 	"path/filepath"
 )
@@ -31,7 +32,25 @@ func NewBookInfo() *BookInfo {
 
 func parseBookInfoFile(dir string, fileInfo os.FileInfo) (*BookInfoFile, error) {
 	path := filepath.Join(dir, fileInfo.Name())
-	cfg, err := ini.Load(path)
+	bytes, err := ioutil.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+
+	bookInfo, err := parseBookInfoBytes(bytes)
+	if err != nil {
+		return nil, err
+	}
+
+	return &BookInfoFile{
+		bookInfo: bookInfo,
+		dir:      dir,
+		fileInfo: fileInfo,
+	}, nil
+}
+
+func parseBookInfoBytes(bytes []byte) (*BookInfo, error) {
+	cfg, err := ini.Load(bytes)
 	if err != nil {
 		return nil, err
 	}
@@ -51,9 +70,5 @@ func parseBookInfoFile(dir string, fileInfo os.FileInfo) (*BookInfoFile, error) 
 	bookInfo.BoughtPrice = section.Key("boughtPrice").String()
 	bookInfo.Price = section.Key("price").String()
 
-	return &BookInfoFile{
-		bookInfo: bookInfo,
-		dir:      dir,
-		fileInfo: fileInfo,
-	}, nil
+	return bookInfo, nil
 }

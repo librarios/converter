@@ -1,7 +1,0 @@
-isbn=9788968482892
-origPubDate=2015
-origTitle=Advanced Analytics with Spark
-pubDate=2016-07-01
-scanDate=2016-12-04
-scanPages=325
-price=26000
